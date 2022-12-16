@@ -51,12 +51,24 @@ app.post("/", async (request, response) => {
     .then(response => response.json())
     .then(async data => {
         //const cards = JSON.parse(data).cards;
-        var element = data?.cards[0];
 
-        const variables = {
-            cardName: "Added " + element?.name + " to your collection" ?? "Card Doesnt Exist",
-            imgURL: element?.imageUrl ?? "\"\" alt=\"No Image Avaliable\""
-        };
+        var variables = {};
+
+        if (data?.cards[0]) {
+
+            var element = data?.cards[0];
+
+            variables = {
+               cardName: "Added " + element?.name + " to your collection" ?? "Card Doesnt Exist",
+               imgURL: element?.imageUrl ?? "\"\" alt=\"No Image Avaliable\""
+            };
+
+        } else {
+            variables = {
+                cardName: "Card Doesnt Exist",
+                imgURL: element?.imageUrl ?? "\"\" alt=\"No Image Avaliable\""
+            };
+        }
         
         await response.render("processForm", variables);
 
@@ -130,6 +142,32 @@ app.get("/collection", async (request, response) => {
         }
 
         response.render("collection", variables);
+
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await client.close();
+    }
+
+});
+
+app.post("/collection", async (request, response) => {
+
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+    try {
+        await client.connect();
+        const result = await client.db(databaseAndCollection.db)
+        .collection(databaseAndCollection.collection)
+        .deleteMany({});
+
+        /* const variables = {
+            numRemoved: result.deletedCount
+        };
+       
+        response.render("clearedCollection", variables); */
+
+        response.redirect("/collection");
 
     } catch (e) {
         console.error(e);
