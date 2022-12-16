@@ -16,3 +16,6 @@ https://api.magicthegathering.io/v1/cards
 Deployed @:
 https://magic-the-gathering-card-colletor.onrender.com/
 
+Youtube Video:
+https://youtu.be/TK02ZQUhwIc
+
