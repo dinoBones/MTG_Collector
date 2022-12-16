@@ -17,7 +17,8 @@ const rl = readline.createInterface({
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-let portNumber = (process.argv.slice(2,3)[0]);
+//let portNumber = (process.argv.slice(2,3)[0]);
+let portNumber = process.env.PORT || 5000;
 
 
 const userName = process.env.MONGO_DB_USERNAME;
