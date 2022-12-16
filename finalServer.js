@@ -63,6 +63,16 @@ app.post("/", async (request, response) => {
                imgURL: element?.imageUrl ?? "\"\" alt=\"No Image Avaliable\""
             };
 
+            try {
+                await client.connect();
+                let newCard = {cardName: element?.name, cardSet: element?.set, cardNum: element?.number, imgURL: element?.imageUrl};
+                await client.db(databaseAndCollection.db).collection(databaseAndCollection.collection).insertOne(newCard);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                await client.close();
+            }
+
         } else {
             variables = {
                 cardName: "Card Doesnt Exist",
@@ -72,7 +82,7 @@ app.post("/", async (request, response) => {
         
         await response.render("processForm", variables);
 
-        try {
+       /*  try {
             await client.connect();
             let newCard = {cardName: element?.name, cardSet: element?.set, cardNum: element?.number, imgURL: element?.imageUrl};
             await client.db(databaseAndCollection.db).collection(databaseAndCollection.collection).insertOne(newCard);
@@ -80,7 +90,7 @@ app.post("/", async (request, response) => {
             console.error(e);
         } finally {
             await client.close();
-        }
+        } */
 
         /* cardList.find(async element => {
 
